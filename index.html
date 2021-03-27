@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang = "ja">
+  <head>
+    <meta charset = "utf-8">
+    <title>マルコフ連鎖</title>
+  </head>
+  <body>
+    <pre>from janome.tokenizer import Tokenizer<br>
+    import random<br>
+from janome.tokenizer import Tokenizer<br>
+  
+# Janomeを使用してテキストデータを単語に分割する<br>
+def wakati(text):<br>
+    text = text.replace('\r','') #スペースを削除<br>
+    text = text.replace('「', '')<br>
+    text = text.replace('」', '')<br>
+    t = Tokenizer()<br>
+    result =t.tokenize(text, wakati=True)<br>
+    return result<br>
+ 
+#デフォルトの文の数は5<br>
+def generate_text(num_sentence=200):<br>
+    src = open("txtファイルのパス", "r").read()<br>
+    wordlist = wakati(src)<br>
+  
+    #マルコフ連鎖用のテーブルを作成<br>
+    markov = {}<br>
+    w1 = ""<br>
+    w2 = ""<br>
+    for word in wordlist:<br>
+        if w1 and w2:<br>
+            if (w1, w2) not in markov:<br>
+                markov[(w1, w2)] = []<br>
+            markov[(w1, w2)].append(word)<br>
+        w1, w2 = w2, word<br>
+  
+    #文章の自動生成<br>
+    count_kuten = 0 #句点「。」の数<br>
+    num_sentence= num_sentence<br>
+    sentence = ""<br>
+    w1, w2  = random.choice(list(markov.keys()))<br>
+    while count_kuten < num_sentence:<br>
+        tmp = random.choice(markov[(w1, w2)])<br>
+        sentence += tmp<br>
+        if(tmp=='\n'):<br>
+            count_kuten += 1<br>
+            sentence += '\n' #1文ごとに改行<br>
+        w1, w2 = w2, tmp<br>
+     
+    print(sentence)<br>
+     
+if __name__ == "__main__":<br>
+    generate_text()<br>
+    </pre>
+  </body>
+</html>
