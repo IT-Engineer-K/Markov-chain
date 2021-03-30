@@ -8,18 +8,15 @@
     <pre>from janome.tokenizer import Tokenizer<br>
 import random<br>
 from janome.tokenizer import Tokenizer<br>
-# Janomeを使用してテキストデータを単語に分割する<br>
+# テキストデータを単語に分割する<br>
 def wakati(text):<br>
     text = text.replace('\r','') #スペースを削除<br>
-    text = text.replace('「', '')<br>
-    text = text.replace('」', '')<br>
     t = Tokenizer()<br>
     result =t.tokenize(text, wakati=True)<br>
     return result<br>
 def generate_text(num_sentence=200):<br>
     src = open("txtファイルのパス", "r").read()<br>
     wordlist = wakati(src)<br>
-    #マルコフ連鎖用のテーブルを作成<br>
     markov = {}<br>
     w1 = ""<br>
     w2 = ""<br>
